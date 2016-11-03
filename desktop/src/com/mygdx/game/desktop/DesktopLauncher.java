@@ -7,7 +7,7 @@ import com.mygdx.game.ToDB;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = 800;
+		config.width = 600;
         config.height = 720;
         new LwjglApplication(new ToDB(), config); 
 	}
