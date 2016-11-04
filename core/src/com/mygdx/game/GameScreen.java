@@ -24,11 +24,12 @@ public class GameScreen extends ScreenAdapter {
     private int width;
     private int stageCounter;
     private int currentstage;
+    private int turn;
     private Texture status;
     private Texture holeImg;
     private Texture boxImg;
     private Texture rockImg;
-    private int [][] gameboard;
+    private int[][] gameboard;
     
 	public GameScreen(ToDB toDB) {
         this.toDB = toDB;
@@ -41,6 +42,7 @@ public class GameScreen extends ScreenAdapter {
         boxPositionX = 0;
         boxPositionY = 0;
         stageCounter = 0;
+        turn = 60;
         
     }
 
@@ -58,33 +60,33 @@ public class GameScreen extends ScreenAdapter {
         	gameboard = mapCreator();
             height = gameboard[1].length;
             width = gameboard[0].length;
-            System.out.println(height + "  " + width);
-                    	stageCounter++;
+            //System.out.println(height + "  " + width);
+          	stageCounter++;
         }
         	batch.begin();
-        	for(int r = 0; r < height; r++) {
-        		for(int c = 0; c < width; c++) {
+        	for (int r = 0; r < height; r++) {
+        		for (int c = 0; c < width; c++) {
         			int x = c * 100;
         			int y = 600 - (r * 100) - 100;
         			
-        			if(gameboard[c][r] == 1) {
+        			if (gameboard[c][r] == 1) {
         				batch.draw(holeImg, x, y);
-        			} else if(gameboard[c][r] == 2) {
+        			} else if (gameboard[c][r] == 2) {
         				batch.draw(boxImg, x + boxPositionX, y + boxPositionY);
-        			} else if(gameboard[c][r] == 3) {
+        			} else if (gameboard[c][r] == 3) {
         				batch.draw(rockImg, x, y);
         			}
         		}
         	}
-        	//batch.draw(box, 100 + 300 + x , 300 + y );
         	batch.draw(status, 0, 600);
+        	System.out.println(turn);
         	batch.end();
-
+        	
 	}
     
-	public int[][] mapCreator(){
+	public int[][] mapCreator() {
 		Random random = new Random();
-		int Map [][] = new int [][]{
+		int Map[][] = new int[][] {
 			{0,0,0,0,0,0},
 			{0,0,0,0,0,0},
 			{0,0,0,0,0,0},
@@ -98,7 +100,7 @@ public class GameScreen extends ScreenAdapter {
         int numberofBox = 6;
         int numberofRock = 6;
 		
-		for (int i = 0; i < numberofHole; ){
+		for (int i = 0; i < numberofHole; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
@@ -106,7 +108,7 @@ public class GameScreen extends ScreenAdapter {
 				i++;
 			}
 		}
-		for (int i = 0; i < numberofBox; ){
+		for (int i = 0; i < numberofBox; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
@@ -114,7 +116,7 @@ public class GameScreen extends ScreenAdapter {
 				i++;
 			}
 		}
-		for (int i = 0; i < numberofRock; ){
+		for (int i = 0; i < numberofRock; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
@@ -126,23 +128,27 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	private void update(float delta) {
-        if(Gdx.input.isKeyPressed(Keys.UP)) {
-        	boxPositionY += 100;
+        if (Gdx.input.isKeyPressed(Keys.UP)) {
+        	boxPositionY += 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-        	boxPositionX -= 100;
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+        	boxPositionX -= 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-        	boxPositionX += 100;
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+        	boxPositionX += 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.DOWN)) {
-        	boxPositionY -= 100;
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+        	boxPositionY -= 10;
+        	turn--;
         }
 
     }
     	
 	@Override
-	public void dispose () {
+	public void dispose() {
 		batch.dispose();
 	}
 
