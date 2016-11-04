@@ -57,7 +57,7 @@ public class GameScreen extends ScreenAdapter {
             int width = gameboard[0].length;
             System.out.println(height + "  " + width);
             
-        	/*batch.begin();
+        	batch.begin();
         	for(int r = 0; r < height; r++) {
         		for(int c = 0; c < width; c++) {
         			int x = c * 100;
@@ -74,8 +74,8 @@ public class GameScreen extends ScreenAdapter {
         	}
         	//batch.draw(box, 100 + 300 + x , 300 + y );
         	batch.draw(status, 0, 600);
-        	batch.end();*/
-        	stageCounter++;
+        	batch.end();
+        
         }
 	}
     
@@ -91,25 +91,25 @@ public class GameScreen extends ScreenAdapter {
 		};
         int height = Map[1].length;
         int width = Map[0].length;
-        int numberofHole = 0;
-        int numberofBox = 0;
-        int numberofRock = 0;
+        int numberofHole = 6;
+        int numberofBox = 6;
+        int numberofRock = 6;
 		
-		while (numberofHole < 6){
+		for (int i = 0; i < numberofHole; i++){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 1;
 			}
 		}
-		while (numberofBox < 6){
+		for (int i = 0; i < numberofBox; i++){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 2;
 			}
 		}
-		while (numberofRock < 6){
+		for (int i = 0; i < numberofRock; i++){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
