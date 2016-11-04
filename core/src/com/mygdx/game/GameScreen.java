@@ -18,8 +18,8 @@ public class GameScreen extends ScreenAdapter {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private ToDB toDB;
-    private int x;
-    private int y;
+    private int boxPositionX;
+    private int boxPositionY;
     private int height;
     private int width;
     private int stageCounter;
@@ -38,8 +38,8 @@ public class GameScreen extends ScreenAdapter {
 		rockImg = new Texture("testrock.jpg");
 		font = new BitmapFont();
 	    font.setColor(Color.WHITE);
-        x = 0;
-        y = 0;
+        boxPositionX = 0;
+        boxPositionY = 0;
         stageCounter = 0;
         
     }
@@ -50,7 +50,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	@Override
 	public void render (float delta) {
-		//update(delta);
+		update(delta);
 		SpriteBatch batch = toDB.batch;
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -70,7 +70,7 @@ public class GameScreen extends ScreenAdapter {
         			if(gameboard[c][r] == 1) {
         				batch.draw(holeImg, x, y);
         			} else if(gameboard[c][r] == 2) {
-        				batch.draw(boxImg, x, y);
+        				batch.draw(boxImg, x + boxPositionX, y + boxPositionY);
         			} else if(gameboard[c][r] == 3) {
         				batch.draw(rockImg, x, y);
         			}
@@ -127,16 +127,16 @@ public class GameScreen extends ScreenAdapter {
 	
 	private void update(float delta) {
         if(Gdx.input.isKeyPressed(Keys.UP)) {
-            y += 10;
+        	boxPositionY += 100;
         }
         if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-            x -= 10;
+        	boxPositionX -= 100;
         }
         if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            x += 10;
+        	boxPositionX += 100;
         }
         if(Gdx.input.isKeyPressed(Keys.DOWN)) {
-            y -= 10;
+        	boxPositionY -= 100;
         }
 
     }
@@ -145,5 +145,5 @@ public class GameScreen extends ScreenAdapter {
 	public void dispose () {
 		batch.dispose();
 	}
-	
+
 }
