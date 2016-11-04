@@ -20,12 +20,15 @@ public class GameScreen extends ScreenAdapter {
 	private ToDB toDB;
     private int x;
     private int y;
+    private int height;
+    private int width;
     private int stageCounter;
     private int currentstage;
     private Texture status;
     private Texture holeImg;
     private Texture boxImg;
     private Texture rockImg;
+    private int [][] gameboard;
     
 	public GameScreen(ToDB toDB) {
         this.toDB = toDB;
@@ -52,11 +55,12 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (stageCounter == currentstage){
-        	int [][] gameboard = mapCreator();
-            int height = gameboard[1].length;
-            int width = gameboard[0].length;
+        	gameboard = mapCreator();
+            height = gameboard[1].length;
+            width = gameboard[0].length;
             System.out.println(height + "  " + width);
-            
+                    	stageCounter++;
+        }
         	batch.begin();
         	for(int r = 0; r < height; r++) {
         		for(int c = 0; c < width; c++) {
@@ -75,8 +79,7 @@ public class GameScreen extends ScreenAdapter {
         	//batch.draw(box, 100 + 300 + x , 300 + y );
         	batch.draw(status, 0, 600);
         	batch.end();
-        
-        }
+
 	}
     
 	public int[][] mapCreator(){
@@ -95,25 +98,28 @@ public class GameScreen extends ScreenAdapter {
         int numberofBox = 6;
         int numberofRock = 6;
 		
-		for (int i = 0; i < numberofHole; i++){
+		for (int i = 0; i < numberofHole; ){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 1;
+				i++;
 			}
 		}
-		for (int i = 0; i < numberofBox; i++){
+		for (int i = 0; i < numberofBox; ){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 2;
+				i++;
 			}
 		}
-		for (int i = 0; i < numberofRock; i++){
+		for (int i = 0; i < numberofRock; ){
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 3;
+				i++;
 			}
 		}
 		return Map;
