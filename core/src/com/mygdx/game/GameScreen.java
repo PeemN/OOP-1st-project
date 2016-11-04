@@ -43,7 +43,6 @@ public class GameScreen extends ScreenAdapter {
         boxPositionY = 0;
         stageCounter = 0;
         turn = 60;
-        
     }
 
 	public void create () {
@@ -86,20 +85,14 @@ public class GameScreen extends ScreenAdapter {
     
 	public int[][] mapCreator() {
 		Random random = new Random();
-		int Map[][] = new int[][] {
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0}
-		};
+		int Map[][] = new int[6][6];
         int height = Map[1].length;
         int width = Map[0].length;
         int numberofHole = 6;
         int numberofBox = 6;
         int numberofRock = 6;
 		
+        //can minimize to 1 method parameter(numberof...) 
 		for (int i = 0; i < numberofHole; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
@@ -144,7 +137,6 @@ public class GameScreen extends ScreenAdapter {
         	boxPositionY -= 10;
         	turn--;
         }
-
     }
     	
 	@Override
