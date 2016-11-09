@@ -47,7 +47,7 @@ public class GameScreen extends ScreenAdapter {
 	
 	@Override
 	public void render (float delta) {
-		//update(delta);
+		update(delta);
 		SpriteBatch batch = toDB.batch;
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
@@ -57,7 +57,7 @@ public class GameScreen extends ScreenAdapter {
             int width = gameboard[0].length;
             System.out.println(height + "  " + width);
             
-        	/*batch.begin();
+        	batch.begin();
         	for(int r = 0; r < height; r++) {
         		for(int c = 0; c < width; c++) {
         			int x = c * 100;
@@ -74,7 +74,7 @@ public class GameScreen extends ScreenAdapter {
         	}
         	//batch.draw(box, 100 + 300 + x , 300 + y );
         	batch.draw(status, 0, 600);
-        	batch.end();*/
+        	batch.end();
         	stageCounter++;
         }
 	}
