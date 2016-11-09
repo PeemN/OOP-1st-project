@@ -18,14 +18,18 @@ public class GameScreen extends ScreenAdapter {
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private ToDB toDB;
-    private int x;
-    private int y;
+    private int boxPositionX;
+    private int boxPositionY;
+    private int height;
+    private int width;
     private int stageCounter;
     private int currentstage;
+    private int turn;
     private Texture status;
     private Texture holeImg;
     private Texture boxImg;
     private Texture rockImg;
+    private int[][] gameboard;
     
 	public GameScreen(ToDB toDB) {
         this.toDB = toDB;
@@ -35,10 +39,10 @@ public class GameScreen extends ScreenAdapter {
 		rockImg = new Texture("testrock.jpg");
 		font = new BitmapFont();
 	    font.setColor(Color.WHITE);
-        x = 0;
-        y = 0;
+        boxPositionX = 0;
+        boxPositionY = 0;
         stageCounter = 0;
-        
+        turn = 60;
     }
 
 	public void create () {
@@ -52,92 +56,93 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (stageCounter == currentstage){
-        	int [][] gameboard = mapCreator();
-            int height = gameboard[1].length;
-            int width = gameboard[0].length;
-            System.out.println(height + "  " + width);
-            
+        	gameboard = mapCreator();
+            height = gameboard[1].length;
+            width = gameboard[0].length;
+            //System.out.println(height + "  " + width);
+          	stageCounter++;
+        }
         	batch.begin();
-        	for(int r = 0; r < height; r++) {
-        		for(int c = 0; c < width; c++) {
+        	for (int r = 0; r < height; r++) {
+        		for (int c = 0; c < width; c++) {
         			int x = c * 100;
         			int y = 600 - (r * 100) - 100;
         			
-        			if(gameboard[c][r] == 1) {
+        			if (gameboard[c][r] == 1) {
         				batch.draw(holeImg, x, y);
-        			} else if(gameboard[c][r] == 2) {
-        				batch.draw(boxImg, x, y);
-        			} else if(gameboard[c][r] == 3) {
+        			} else if (gameboard[c][r] == 2) {
+        				batch.draw(boxImg, x + boxPositionX, y + boxPositionY);
+        			} else if (gameboard[c][r] == 3) {
         				batch.draw(rockImg, x, y);
         			}
         		}
         	}
-        	//batch.draw(box, 100 + 300 + x , 300 + y );
         	batch.draw(status, 0, 600);
+        	System.out.println(turn);
         	batch.end();
-        	stageCounter++;
-        }
+        	
 	}
     
-	public int[][] mapCreator(){
+	public int[][] mapCreator() {
 		Random random = new Random();
-		int Map [][] = new int [][]{
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0},
-			{0,0,0,0,0,0}
-		};
+		int Map[][] = new int[6][6];
         int height = Map[1].length;
         int width = Map[0].length;
-        int numberofHole = 0;
-        int numberofBox = 0;
-        int numberofRock = 0;
+        int numberofHole = 6;
+        int numberofBox = 6;
+        int numberofRock = 6;
 		
-		while (numberofHole < 6){
+        //can minimize to 1 method parameter(numberof...) 
+		for (int i = 0; i < numberofHole; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 1;
+				i++;
 			}
 		}
-		while (numberofBox < 6){
+		for (int i = 0; i < numberofBox; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 2;
+				i++;
 			}
 		}
-		while (numberofRock < 6){
+		for (int i = 0; i < numberofRock; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
 				Map[mapR][mapC] = 3;
+				i++;
 			}
 		}
 		return Map;
 	}
 	
 	private void update(float delta) {
-        if(Gdx.input.isKeyPressed(Keys.UP)) {
-            y += 10;
+        if (Gdx.input.isKeyPressed(Keys.UP)) {
+        	boxPositionY += 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.LEFT)) {
-            x -= 10;
+        if (Gdx.input.isKeyPressed(Keys.LEFT)) {
+        	boxPositionX -= 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.RIGHT)) {
-            x += 10;
+        if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
+        	boxPositionX += 10;
+        	turn--;
         }
-        if(Gdx.input.isKeyPressed(Keys.DOWN)) {
-            y -= 10;
+        if (Gdx.input.isKeyPressed(Keys.DOWN)) {
+        	boxPositionY -= 10;
+        	turn--;
         }
-
     }
     	
 	@Override
-	public void dispose () {
+	public void dispose() {
 		batch.dispose();
 	}
-	
+
 }
+
