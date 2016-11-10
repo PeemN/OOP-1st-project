@@ -2,7 +2,6 @@ package com.mygdx.game;
 
 import java.awt.Font;
 import java.util.Random;
-
 import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input.Keys;
@@ -30,9 +29,12 @@ public class GameScreen extends ScreenAdapter {
     private Texture boxImg;
     private Texture rockImg;
     private int[][] gameboard;
+    private GameField gameField;
     
 	public GameScreen(ToDB toDB) {
         this.toDB = toDB;
+        GameField gameField = new GameField();
+        
 		status = new Texture("statusboard.jpg");
 		holeImg = new Texture("testhole.jpg");
 		boxImg = new Texture("testbox.jpg");
@@ -56,13 +58,15 @@ public class GameScreen extends ScreenAdapter {
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         if (stageCounter == currentstage){
-        	gameboard = mapCreator();
+        	
+        	gameboard = gameField.mapCreator();
             height = gameboard[1].length;
             width = gameboard[0].length;
-            //System.out.println(height + "  " + width);
           	stageCounter++;
+          	
         }
         	batch.begin();
+        	//maprender
         	for (int r = 0; r < height; r++) {
         		for (int c = 0; c < width; c++) {
         			int x = c * 100;
@@ -83,42 +87,35 @@ public class GameScreen extends ScreenAdapter {
         	
 	}
     
-	public int[][] mapCreator() {
-		Random random = new Random();
+	/*public int[][] mapCreator() {
 		int Map[][] = new int[6][6];
-        int height = Map[1].length;
-        int width = Map[0].length;
         int numberofHole = 6;
         int numberofBox = 6;
         int numberofRock = 6;
-		
-        //can minimize to 1 method parameter(numberof...) 
-		for (int i = 0; i < numberofHole; ) {
+        int codeHole = 1;
+        int codeBox = 2;
+        int codeRock = 3;
+        
+        objectMarker(Map,numberofHole,codeHole);
+        objectMarker(Map,numberofBox,codeBox);
+        objectMarker(Map,numberofRock,codeRock);
+		return Map;
+	}
+	
+	public int[][] objectMarker(int[][] Map, int numberofObject, int typeofObject) {
+		Random random = new Random();
+		int height = Map[1].length;
+        int width = Map[0].length;
+		for (int i = 0; i < numberofObject; ) {
 			int mapR = random.nextInt(height);
 			int mapC = random.nextInt(width);
 			if(Map[mapR][mapC] == 0){
-				Map[mapR][mapC] = 1;
-				i++;
-			}
-		}
-		for (int i = 0; i < numberofBox; ) {
-			int mapR = random.nextInt(height);
-			int mapC = random.nextInt(width);
-			if(Map[mapR][mapC] == 0){
-				Map[mapR][mapC] = 2;
-				i++;
-			}
-		}
-		for (int i = 0; i < numberofRock; ) {
-			int mapR = random.nextInt(height);
-			int mapC = random.nextInt(width);
-			if(Map[mapR][mapC] == 0){
-				Map[mapR][mapC] = 3;
+				Map[mapR][mapC] = typeofObject;
 				i++;
 			}
 		}
 		return Map;
-	}
+	}*/
 	
 	private void update(float delta) {
         if (Gdx.input.isKeyPressed(Keys.UP)) {

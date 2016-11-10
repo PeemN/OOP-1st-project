@@ -10,7 +10,7 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class ToDB extends Game  {
-	//wait for code re factory ;^)
+	
     public SpriteBatch batch;
     
 
