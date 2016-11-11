@@ -44,7 +44,7 @@ public class GameField {
 		int[] currentBoxPositionX = findBoxX(Map, 6);
 		int[] currentBoxPositionY = findBoxY(Map, 6);
         
-        for (int i = 0; i < numberofBox;i++){
+        for (int i = 0; i < 1/*numberofBox*/;i++){
         	Map = checkNextBoxPosition(Map,currentBoxPositionX[i],currentBoxPositionY[i],inputDirection);
         }
 		return Map;
@@ -84,20 +84,20 @@ public class GameField {
 			return boxPositionY;
 	}
 	public int[][] checkNextBoxPosition(int[][] Map,int column,int row, int movementtype){
-		int height = Map[1].length;
-        int width = Map[0].length;
+		int height = Map[1].length - 1;
+        int width = Map[0].length - 1;
         int nextColumn = column;
         int nextRow = row;
         
         switch (movementtype){
         case DIRECTION_UP:
-        	nextRow += 1;
+        	nextRow -= 1;
         	break;
         case DIRECTION_RIGHT:
         	nextColumn += 1;
         	break;
         case DIRECTION_DOWN:
-        	nextRow -= 1;
+        	nextRow += 1;
         	break;
         case DIRECTION_LEFT:
         	nextColumn -= 1;
@@ -107,13 +107,13 @@ public class GameField {
 			nextColumn = 0;
 		}
 		if (nextColumn > width){
-			nextColumn = width -1;
+			nextColumn = width;
 		}
 		if (nextRow < 0){
 			nextRow = 0;
 		}
 		if (nextRow > height){
-			nextRow = height -1;
+			nextRow = height;
 		}
 		switch (Map[nextColumn][nextRow]){
 		case codeBlank:
@@ -127,6 +127,7 @@ public class GameField {
 		case codeHole:
 			Map[column][row] = 0;
 			Map[nextColumn][nextRow] = 0;
+			
 			break;
 		}
 		return Map;
