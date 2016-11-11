@@ -74,28 +74,11 @@ public class GameField {
 			return boxPosition;
 	}
 	
-	/*public int[] findBoxY(int[][] Map,int numberofBox){
-		int[] boxPositionY = new int[numberofBox];
-		int height = Map[1].length;
-        int width = Map[0].length;
-        int j = 0;
-        
-		for (int r = 0; r < height; r++) {
-    		for (int c = 0; c < width; c++) {
-    			if (Map[c][r] == 2){
-    				boxPositionY[j] = r;
-    				j++;
-    			}
-    		}
-		}
-			return boxPositionY;
-	}*/
-	
 	public int[][] checkNextBoxPosition(int[][] Map,int column,int row, int movementtype){
-		int height = Map[1].length - 1;
-        int width = Map[0].length - 1;
         int nextColumn = column;
         int nextRow = row;
+        int c = 0;
+        int r = 1;
         
         switch (movementtype){
         case DIRECTION_UP:
@@ -111,20 +94,8 @@ public class GameField {
         	nextColumn -= 1;
         	break;
         }
-        
-		if (nextColumn < 0){
-			nextColumn = 0;
-		}
-		if (nextColumn > width){
-			nextColumn = width;
-		}
-		if (nextRow < 0){
-			nextRow = 0;
-		}
-		if (nextRow > height){
-			nextRow = height;
-		}
-		
+        nextColumn = wallCheck(Map, nextColumn, c);
+        nextRow = wallCheck(Map, nextRow, r);
 		switch (Map[nextColumn][nextRow]){
 		case codeBlank:
 			Map[column][row] = 0;
@@ -141,5 +112,26 @@ public class GameField {
 			}       
 		return Map;
 	}
+	
 		
+	public int wallCheck(int[][] Map, int input, int typeofInput){
+		int height = Map[1].length - 1;
+        int width = Map[0].length - 1;
+        if (typeofInput == 0) {
+        	if (input < 0){
+    			input = 0;
+    		}
+    		if (input > width) {
+    			input = width;
+    		}
+        } else {
+        	if (input < 0){
+    			input = 0;
+    		}
+    		if (input > height) {
+    			input = height;
+    		}
+        } 
+		return input;
+	}
 }
