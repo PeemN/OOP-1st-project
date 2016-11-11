@@ -41,8 +41,10 @@ public class GameField {
 	}
 	
 	public int[][] mapUpdate(int[][] Map, int inputDirection) {
-		int[] currentBoxPositionX = findBoxX(Map, 6);
-		int[] currentBoxPositionY = findBoxY(Map, 6);
+		int x = 0;
+		int y = 1;
+		int[] currentBoxPositionX = findBox(Map, 6, x);
+		int[] currentBoxPositionY = findBox(Map, 6, y);
         
         for (int i = 0; i < numberofBox; i++){
         	Map = checkNextBoxPosition(Map,currentBoxPositionX[i],currentBoxPositionY[i],inputDirection);
@@ -50,8 +52,8 @@ public class GameField {
 		return Map;
 	}
 	
-	public int[] findBoxX(int[][] Map,int numberofBox){
-		int[] boxPositionX = new int[numberofBox];
+	public int[] findBox(int[][] Map,int numberofBox, int inputType){
+		int[] boxPosition = new int[numberofBox];
 		int height = Map[1].length;
         int width = Map[0].length;
         int i = 0;
@@ -59,15 +61,20 @@ public class GameField {
 		for (int r = 0; r < height; r++) {
     		for (int c = 0; c < width; c++) {
     			if (Map[c][r] == 2){
-    				boxPositionX[i] = c;
-    				i++;
+    				if (inputType == 0) {
+    					boxPosition[i] = c;
+    					i++;
+    				} else if (inputType == 1) {
+    					boxPosition[i] = r;
+    					i++;
+    				}
     			}
     		}
 		}
-			return boxPositionX;
+			return boxPosition;
 	}
 	
-	public int[] findBoxY(int[][] Map,int numberofBox){
+	/*public int[] findBoxY(int[][] Map,int numberofBox){
 		int[] boxPositionY = new int[numberofBox];
 		int height = Map[1].length;
         int width = Map[0].length;
@@ -82,13 +89,14 @@ public class GameField {
     		}
 		}
 			return boxPositionY;
-	}
+	}*/
+	
 	public int[][] checkNextBoxPosition(int[][] Map,int column,int row, int movementtype){
 		int height = Map[1].length - 1;
         int width = Map[0].length - 1;
         int nextColumn = column;
         int nextRow = row;
-        if (nextColumn != 0 || nextRow != 0){
+        
         switch (movementtype){
         case DIRECTION_UP:
         	nextRow -= 1;
@@ -103,6 +111,7 @@ public class GameField {
         	nextColumn -= 1;
         	break;
         }
+        
 		if (nextColumn < 0){
 			nextColumn = 0;
 		}
@@ -115,6 +124,7 @@ public class GameField {
 		if (nextRow > height){
 			nextRow = height;
 		}
+		
 		switch (Map[nextColumn][nextRow]){
 		case codeBlank:
 			Map[column][row] = 0;
@@ -128,8 +138,7 @@ public class GameField {
 			Map[column][row] = 0;
 			Map[nextColumn][nextRow] = 0;	
 			break;
-			}
-        }
+			}       
 		return Map;
 	}
 		
