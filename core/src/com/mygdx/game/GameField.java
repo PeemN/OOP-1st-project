@@ -4,9 +4,6 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class GameField {
-	public static int numberofHole = 6;
-	public static int numberofBox = 6;
-	public static int numberofRock = 6;
 	public static final int codeBlank = 0;
 	public static final int codeHole = 1;
     public static final int codeBox = 2;
@@ -17,7 +14,7 @@ public class GameField {
     public static final int DIRECTION_DOWN = 3;
     public static final int DIRECTION_LEFT = 4;
 	
-	public int[][] mapCreator() {
+	public int[][] mapCreator(int numberofHole ,int numberofBox ,int numberofRock) {
 		int Map[][] = new int[6][6];
 
         objectMarker(Map,numberofHole,codeHole);
@@ -42,25 +39,24 @@ public class GameField {
 		return Map;
 	}
 	
-	public int[][] mapUpdate(int[][] Map, int inputDirection) {
+	public int[][] mapUpdate(int[][] Map, int numberofBox, int inputDirection) {
 		int x = 0;
 		int y = 1;
-		ArrayList<Integer> boxPositionX = findBox(Map, 6, x);
-		ArrayList<Integer> boxPositionY = findBox(Map, 6, y);
+		ArrayList<Integer> boxPositionX = findBox(Map,x);
+		ArrayList<Integer> boxPositionY = findBox(Map,y);
 		
         if (!boxPositionX.isEmpty()){
         	for (int i = 0; i < numberofBox; i++){
         		numberofBox = boxPositionX.size();
         		int currentBoxPositionX = boxPositionX.get(i);
         		int currentBoxPositionY= boxPositionY.get(i);
-        		Map = checkNextBoxPosition(Map,currentBoxPositionX,currentBoxPositionY,inputDirection);
+        		Map = checkNextBoxPosition(Map ,currentBoxPositionX ,currentBoxPositionY ,inputDirection);
         	}
         }
-        numberofBox = 6;
 		return Map;
 	}
 	
-	public ArrayList<Integer> findBox(int[][] Map,int numberofBox, int inputType){
+	public ArrayList<Integer> findBox(int[][] Map, int inputType){
 		ArrayList<Integer> boxPosition = new ArrayList<Integer>();
 		int height = Map[1].length;
         int width = Map[0].length;
@@ -79,7 +75,7 @@ public class GameField {
 			return boxPosition;
 	}
 	
-	public int[][] checkNextBoxPosition(int[][] Map,int column,int row, int movementtype){
+	public int[][] checkNextBoxPosition(int[][] Map, int column, int row, int movementtype){
         int nextColumn = column;
         int nextRow = row;
         int c = 0;
