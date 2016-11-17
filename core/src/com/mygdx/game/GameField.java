@@ -11,6 +11,7 @@ public class GameField {
 	public static final int codeHole = 1;
     public static final int codeBox = 2;
     public static final int codeRock = 3;
+    public static final int DIRECTION_STILL = 0;
     public static final int DIRECTION_UP = 1;
     public static final int DIRECTION_RIGHT = 2;
     public static final int DIRECTION_DOWN = 3;
@@ -44,19 +45,18 @@ public class GameField {
 	public int[][] mapUpdate(int[][] Map, int inputDirection) {
 		int x = 0;
 		int y = 1;
-		//int[] currentBoxPositionX = findBox(Map, 6, x);
-		//int[] currentBoxPositionY = findBox(Map, 6, y);
 		ArrayList<Integer> boxPositionX = findBox(Map, 6, x);
 		ArrayList<Integer> boxPositionY = findBox(Map, 6, y);
+		
         if (!boxPositionX.isEmpty()){
         	for (int i = 0; i < numberofBox; i++){
         		numberofBox = boxPositionX.size();
         		int currentBoxPositionX = boxPositionX.get(i);
         		int currentBoxPositionY= boxPositionY.get(i);
         		Map = checkNextBoxPosition(Map,currentBoxPositionX,currentBoxPositionY,inputDirection);
-        		System.out.println("Current number of box:" + numberofBox);
         	}
         }
+        numberofBox = 6;
 		return Map;
 	}
 	
@@ -64,19 +64,14 @@ public class GameField {
 		ArrayList<Integer> boxPosition = new ArrayList<Integer>();
 		int height = Map[1].length;
         int width = Map[0].length;
-        int i = 0;
         
 		for (int r = 0; r < height; r++) {
     		for (int c = 0; c < width; c++) {
     			if (Map[c][r] == 2){
     				if (inputType == 0) {
-    					//boxPosition[i] = c;
     					boxPosition.add(c);
-    					i++;
     				} else if (inputType == 1) {
-    					//boxPosition[i] = r;
     					boxPosition.add(r);
-    					i++;
     				}
     			}
     		}
@@ -103,6 +98,8 @@ public class GameField {
         case DIRECTION_LEFT:
         	nextColumn -= 1;
         	break;
+        case DIRECTION_STILL:
+        	break;
         }
         nextColumn = wallCheck(Map, nextColumn, c);
         nextRow = wallCheck(Map, nextRow, r);
@@ -127,6 +124,7 @@ public class GameField {
 	public int wallCheck(int[][] Map, int input, int typeofInput){
 		int height = Map[1].length - 1;
         int width = Map[0].length - 1;
+        
         if (typeofInput == 0) {
         	if (input < 0){
     			input = 0;

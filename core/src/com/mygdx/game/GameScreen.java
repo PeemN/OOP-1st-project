@@ -27,6 +27,8 @@ public class GameScreen extends ScreenAdapter {
     private Texture boxImg;
     private Texture rockImg;
     private int[][] gameboard;
+    private int reset;
+    
     GameField gameField = new GameField();
     
 	public GameScreen(ToDB toDB) {
@@ -41,6 +43,7 @@ public class GameScreen extends ScreenAdapter {
 	    inputDirection = 0;
         stageCounter = 0;
         turn = 60;
+        reset = 10;
     }
 
 	public void create() {
@@ -62,6 +65,14 @@ public class GameScreen extends ScreenAdapter {
           	stageCounter++;
           	
         }
+        if (Gdx.input.isKeyPressed(Keys.R) && (reset != 0)){
+        	gameboard = gameField.mapCreator();
+            height = gameboard[1].length;
+            width = gameboard[0].length;
+            reset--;
+            addDelay(500);
+			
+        }
         	batch.begin();
         	//maprender
         	for (int r = 0; r < height; r++) {
@@ -82,25 +93,30 @@ public class GameScreen extends ScreenAdapter {
         	System.out.println(turn);
         	batch.end();
         	gameboard = gameField.mapUpdate(gameboard, inputDirection);
+        	inputDirection = 0;
         	
 	}
 	
 	private void update(float delta) {
         if (Gdx.input.isKeyPressed(Keys.UP)) {
         	inputDirection = 1;
-        	//turn--;
+        	turn--;
+        	addDelay(200);
         }
         if (Gdx.input.isKeyPressed(Keys.RIGHT)) {
         	inputDirection = 2;
-        	//turn--;
+        	turn--;
+        	addDelay(200);
         }
         if (Gdx.input.isKeyPressed(Keys.DOWN)) {
         	inputDirection = 3;
-        	//turn--;
+        	turn--;
+        	addDelay(200);
         }
         if (Gdx.input.isKeyPressed(Keys.LEFT)) {
         	inputDirection = 4;
-        	//turn--;
+        	turn--;
+        	addDelay(200);
         }
     }
     	
@@ -108,6 +124,15 @@ public class GameScreen extends ScreenAdapter {
 	public void dispose() {
 		batch.dispose();
 	}
-
+	
+	public void addDelay(int delayTime){
+		try {
+			Thread.sleep(delayTime);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 }
 
