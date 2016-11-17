@@ -21,7 +21,6 @@ public class GameScreen extends ScreenAdapter {
     private int height;
     private int width;
     private int stageCounter;
-    private int currentstage;
     private int turn;
     private Texture status;
     private Texture holeImg;
@@ -55,7 +54,7 @@ public class GameScreen extends ScreenAdapter {
 		SpriteBatch batch = toDB.batch;
         Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        if (stageCounter == currentstage){
+        if (stageCounter == 0){
         	
         	gameboard = gameField.mapCreator();
             height = gameboard[1].length;

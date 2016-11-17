@@ -1,5 +1,6 @@
 package com.mygdx.game;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 public class GameField {
@@ -43,17 +44,24 @@ public class GameField {
 	public int[][] mapUpdate(int[][] Map, int inputDirection) {
 		int x = 0;
 		int y = 1;
-		int[] currentBoxPositionX = findBox(Map, 6, x);
-		int[] currentBoxPositionY = findBox(Map, 6, y);
-        
-        for (int i = 0; i < numberofBox; i++){
-        	Map = checkNextBoxPosition(Map,currentBoxPositionX[i],currentBoxPositionY[i],inputDirection);
+		//int[] currentBoxPositionX = findBox(Map, 6, x);
+		//int[] currentBoxPositionY = findBox(Map, 6, y);
+		ArrayList<Integer> boxPositionX = findBox(Map, 6, x);
+		ArrayList<Integer> boxPositionY = findBox(Map, 6, y);
+        if (!boxPositionX.isEmpty()){
+        	for (int i = 0; i < numberofBox; i++){
+        		numberofBox = boxPositionX.size();
+        		int currentBoxPositionX = boxPositionX.get(i);
+        		int currentBoxPositionY= boxPositionY.get(i);
+        		Map = checkNextBoxPosition(Map,currentBoxPositionX,currentBoxPositionY,inputDirection);
+        		System.out.println("Current number of box:" + numberofBox);
+        	}
         }
 		return Map;
 	}
 	
-	public int[] findBox(int[][] Map,int numberofBox, int inputType){
-		int[] boxPosition = new int[numberofBox];
+	public ArrayList<Integer> findBox(int[][] Map,int numberofBox, int inputType){
+		ArrayList<Integer> boxPosition = new ArrayList<Integer>();
 		int height = Map[1].length;
         int width = Map[0].length;
         int i = 0;
@@ -62,10 +70,12 @@ public class GameField {
     		for (int c = 0; c < width; c++) {
     			if (Map[c][r] == 2){
     				if (inputType == 0) {
-    					boxPosition[i] = c;
+    					//boxPosition[i] = c;
+    					boxPosition.add(c);
     					i++;
     				} else if (inputType == 1) {
-    					boxPosition[i] = r;
+    					//boxPosition[i] = r;
+    					boxPosition.add(r);
     					i++;
     				}
     			}
