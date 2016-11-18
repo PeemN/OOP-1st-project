@@ -56,7 +56,7 @@ public class GameScreen extends ScreenAdapter {
 		font = new BitmapFont();
 	    inputDirection = 0;
         stageCounter = 0;
-        numberofStage = 1;
+        numberofStage = 6;
         numberofHole = 6;
         numberofBox = 6;
         numberofRock = 6;
@@ -91,7 +91,9 @@ public class GameScreen extends ScreenAdapter {
     		currentNumberofBox = boxPosition.size();
     		System.out.println(turn);
     		inputDirection = 0;
+    		font.setColor(Color.BLACK);
     		SpriteBatch batch = toDB.batch;
+    		
         	batch.begin();
         	for (int r = 0; r < height; r++) {
         		for (int c = 0; c < width; c++) {
@@ -108,13 +110,18 @@ public class GameScreen extends ScreenAdapter {
        			}
        		}
        		batch.draw(status, 0, 600);
+       		font.draw(batch, "Turn: " + turn, 50, 680);
+       		font.draw(batch, "Reset: " + reset, 50, 640);
+       		font.draw(batch, "Score: " + score, 50, 660);
        		batch.end();
        		if (clearStageChecker(gameboard)){
-    			 score = scoreCalculation();
+    			 score += scoreCalculation();
     			numberofRock++;
             	gameboard = gameField.mapCreator(numberofBox, numberofHole, numberofRock);
                 height = gameboard[1].length;
                 width = gameboard[0].length;
+                turn += 10;
+                reset += 1;
     			stageCounter++;
     		}
         }
@@ -124,23 +131,25 @@ public class GameScreen extends ScreenAdapter {
            	
         	font.setColor(Color.CORAL);
         	batch.begin();
-        	font.draw(batch, "Congratulation", 250, 380);
-        	font.draw(batch, "Your score is " + score, 240, 360);
-        	font.draw(batch, "High score " + highestScore, 250, 340);
+        	font.draw(batch, "Congratulation", 250, 400);
+        	font.draw(batch, "Your score is " + score, 240, 380);
+        	font.draw(batch, "High score " + highestScore, 250, 360);
         	batch.end();
         	gameRestart();
         	
         }
         if (gameOver()){
+        	addHeightScore(score);
            	SpriteBatch batch = toDB.batch;
            	            
            	Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
             Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         	font.setColor(Color.BLACK);
+        	
         	batch.begin();
-        	font.draw(batch, "Game Over", 250, 380);
-        	addHeightScore(score);
-        	font.draw(batch, "Your score is " + score, 240, 360);
+        	font.draw(batch, "Game Over", 260, 400);
+        	font.draw(batch, "Your score is " + score, 250, 380);
+        	font.draw(batch, "High score " + highestScore, 250, 360);
         	batch.end();
         }
 	}
@@ -167,7 +176,7 @@ public class GameScreen extends ScreenAdapter {
         	addDelay(200);
         }
         if (Gdx.input.isKeyPressed(Keys.R) && (reset != 0)){
-        	gameboard = gameField.mapCreator(numberofHole, currentNumberofBox, numberofRock);
+        	gameboard = gameField.mapCreator(currentNumberofBox, currentNumberofBox, numberofRock);
             height = gameboard[1].length;
             width = gameboard[0].length;
             reset--;
@@ -180,7 +189,7 @@ public class GameScreen extends ScreenAdapter {
 		SpriteBatch batch = toDB.batch;
     	font.setColor(Color.BLACK);
     	batch.begin();
-    	font.draw(batch, "Press Enter to Start", 250, 360);
+    	font.draw(batch, "Press Enter to Start", 250, 400);
     	batch.end();
 	}
     	
@@ -217,6 +226,7 @@ public class GameScreen extends ScreenAdapter {
     		stageCounter = 0;
 			turn = startTurn;
 			reset = startResetCount;
+			score = 0;
 			numberofRock = 6;
     	}
 	}
