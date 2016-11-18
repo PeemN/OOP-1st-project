@@ -42,8 +42,8 @@ public class GameField {
 	public int[][] mapUpdate(int[][] Map, int numberofBox, int inputDirection) {
 		int x = 0;
 		int y = 1;
-		ArrayList<Integer> boxPositionX = findBox(Map,x);
-		ArrayList<Integer> boxPositionY = findBox(Map,y);
+		ArrayList<Integer> boxPositionX = findBox(Map, codeBox, x);
+		ArrayList<Integer> boxPositionY = findBox(Map, codeBox, y);
 		
         if (!boxPositionX.isEmpty()){
         	for (int i = 0; i < numberofBox; i++){
@@ -56,14 +56,14 @@ public class GameField {
 		return Map;
 	}
 	
-	public ArrayList<Integer> findBox(int[][] Map, int inputType){
+	public ArrayList<Integer> findBox(int[][] Map, int objectType, int inputType){
 		ArrayList<Integer> boxPosition = new ArrayList<Integer>();
 		int height = Map[1].length;
         int width = Map[0].length;
         
 		for (int r = 0; r < height; r++) {
     		for (int c = 0; c < width; c++) {
-    			if (Map[c][r] == 2){
+    			if (Map[c][r] == objectType){
     				if (inputType == 0) {
     					boxPosition.add(c);
     				} else if (inputType == 1) {

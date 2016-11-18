@@ -19,6 +19,8 @@ import com.badlogic.gdx.graphics.Texture;
 
 public class GameScreen extends ScreenAdapter {
 	private SpriteBatch batch;
+    private static final int startTurn = 100;
+    private static final int startResetCount = 10;
 	private ToDB toDB;
 	private int inputDirection;
     private int height;
@@ -32,6 +34,7 @@ public class GameScreen extends ScreenAdapter {
     private int numberofBox;
     private int numberofRock;
     private int numberofStage;
+    private int currentNumberofBox;
     private BitmapFont font;
     private Texture status;
     private Texture holeImg;
@@ -43,21 +46,21 @@ public class GameScreen extends ScreenAdapter {
     
 	public GameScreen(ToDB toDB) {
         this.toDB = toDB;
+        turn = startTurn;
+        reset = startResetCount;
         
 		status = new Texture("statusboard.jpg");
 		holeImg = new Texture("testhole.jpg");
 		boxImg = new Texture("testbox.jpg");
 		rockImg = new Texture("testrock.jpg");
 		font = new BitmapFont();
-	    font.setColor(Color.BLACK);
 	    inputDirection = 0;
         stageCounter = 0;
-        turn = 60;
-        reset = 10;
-        numberofStage = 5;
+        numberofStage = 1;
         numberofHole = 6;
         numberofBox = 6;
         numberofRock = 6;
+        highestScore = 0;
     }
 
 	public void create() {
@@ -79,11 +82,13 @@ public class GameScreen extends ScreenAdapter {
         }
         if (stageCounter == 0)
         {
-        	//displaystartScreen
+        	startScreen();
         }
         if (stageCounter > 0 && stageCounter <= numberofStage){
         	update(delta);
     		gameboard = gameField.mapUpdate(gameboard, numberofBox, inputDirection);
+    		ArrayList<Integer> boxPosition = gameField.findBox(gameboard, GameField.codeBox, 0);
+    		currentNumberofBox = boxPosition.size();
     		System.out.println(turn);
     		inputDirection = 0;
     		SpriteBatch batch = toDB.batch;
@@ -102,10 +107,10 @@ public class GameScreen extends ScreenAdapter {
        				}
        			}
        		}
-       		//batch.draw(status, 0, 600);
+       		batch.draw(status, 0, 600);
        		batch.end();
        		if (clearStageChecker(gameboard)){
-    			scoreCalculation();
+    			 score = scoreCalculation();
     			numberofRock++;
             	gameboard = gameField.mapCreator(numberofBox, numberofHole, numberofRock);
                 height = gameboard[1].length;
@@ -114,10 +119,29 @@ public class GameScreen extends ScreenAdapter {
     		}
         }
         if (stageCounter > numberofStage){
-        	//displayresult & highscore
+        	addHeightScore(score);
+           	SpriteBatch batch = toDB.batch;
+           	
+        	font.setColor(Color.CORAL);
+        	batch.begin();
+        	font.draw(batch, "Congratulation", 250, 380);
+        	font.draw(batch, "Your score is " + score, 240, 360);
+        	font.draw(batch, "High score " + highestScore, 250, 340);
+        	batch.end();
+        	gameRestart();
+        	
         }
         if (gameOver()){
-        	//gameoverscreen & score
+           	SpriteBatch batch = toDB.batch;
+           	            
+           	Gdx.gl.glClearColor(0.85f, 0.85f, 0.85f, 1);
+            Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        	font.setColor(Color.BLACK);
+        	batch.begin();
+        	font.draw(batch, "Game Over", 250, 380);
+        	addHeightScore(score);
+        	font.draw(batch, "Your score is " + score, 240, 360);
+        	batch.end();
         }
 	}
 	
@@ -143,7 +167,7 @@ public class GameScreen extends ScreenAdapter {
         	addDelay(200);
         }
         if (Gdx.input.isKeyPressed(Keys.R) && (reset != 0)){
-        	gameboard = gameField.mapCreator(numberofBox, numberofHole, numberofRock);
+        	gameboard = gameField.mapCreator(numberofHole, currentNumberofBox, numberofRock);
             height = gameboard[1].length;
             width = gameboard[0].length;
             reset--;
@@ -153,14 +177,18 @@ public class GameScreen extends ScreenAdapter {
     }
 	
 	public void startScreen(){
-		
+		SpriteBatch batch = toDB.batch;
+    	font.setColor(Color.BLACK);
+    	batch.begin();
+    	font.draw(batch, "Press Enter to Start", 250, 360);
+    	batch.end();
 	}
     	
 	public boolean clearStageChecker(int[][] Map){
 		int boxLeft;
 		boolean stageClear = false;
 		
-		ArrayList<Integer> boxPosition = gameField.findBox(Map, 0);
+		ArrayList<Integer> boxPosition = gameField.findBox(Map, GameField.codeBox, 0);
 		boxLeft = boxPosition.size();
 		if (boxLeft == 0){
 			stageClear = true;
@@ -169,20 +197,34 @@ public class GameScreen extends ScreenAdapter {
 	}
 	
 	public boolean gameOver(){
-		boolean noTurnReset = false;
-		if (turn == 0){
-			noTurnReset = true;
+		boolean noTurnAndReset = false;
+		if (turn <= 0){
+			noTurnAndReset = true;
 		}
 		if (reset == 0){
-			noTurnReset = true;
+			noTurnAndReset = true;
 		}
-		return noTurnReset;
+		return noTurnAndReset;
 	}
 	
 	public int scoreCalculation(){
 		int score = (100*turn) + (500*reset);
-		
 		return score;
+	}
+	
+	public void gameRestart(){
+    	if (Gdx.input.isKeyPressed(Keys.ENTER)){
+    		stageCounter = 0;
+			turn = startTurn;
+			reset = startResetCount;
+			numberofRock = 6;
+    	}
+	}
+	
+	public void addHeightScore(int endGamescore){
+		if (endGamescore >= highestScore){
+			highestScore = endGamescore;
+		}
 	}
 	
 	public void addDelay(int delayTime){
